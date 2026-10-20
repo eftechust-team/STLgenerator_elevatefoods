@@ -95,6 +95,15 @@ def sanitize_storage_filename(filename):
     return safe_name or f'file_{uuid.uuid4().hex[:8]}'
 
 
+def build_stl_filename(source_name, color):
+    safe_source = sanitize_storage_filename(source_name)
+    safe_color = str(color or '').strip().lower()
+    if safe_color not in {'yellow', 'green'}:
+        raise ValueError('Color must be yellow or green.')
+    timestamp = datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S_%f')
+    return f'{safe_source}_{safe_color}_{timestamp}.stl'
+
+
 def supabase_public_url(object_path):
     encoded_path = '/'.join(quote(segment, safe='') for segment in object_path.split('/'))
     return f'{SUPABASE_URL}/storage/v1/object/public/{SUPABASE_STORAGE_BUCKET}/{encoded_path}'
@@ -108,7 +117,7 @@ def upload_bytes_to_supabase(object_path, payload, content_type='application/oct
     response = http_session.post(
         endpoint,
         headers={
-            'Authorization': f'Bearer {SUPABASE_SERVICE_ROLE_KEY}',
+            'Authorization': 'Bearer ' + SUPABASE_SERVICE_ROLE_KEY,
             'apikey': SUPABASE_SERVICE_ROLE_KEY,
             'Content-Type': content_type,
             'x-upsert': 'true'
@@ -273,6 +282,10 @@ def fast_generate_stl():
         data = request.get_json(silent=True) or {}
         image_b64 = data['image']
         height_mm = float(data.get('height', 5.0))
+        color = str(data.get('color') or '').strip().lower()
+        if color not in {'yellow', 'green'}:
+            return jsonify({'error': 'Color must be yellow or green.'}), 400
+        download_name = build_stl_filename(data.get('source_name') or 'model', color)
 
         # Decode base64 image
         image_data = base64.b64decode(image_b64)
@@ -297,7 +310,6 @@ def fast_generate_stl():
         )
         
         # Return STL directly (no ZIP for single file)
-        download_name = sanitize_storage_filename(data.get('download_name') or 'model.stl')
         supabase_uploads = []
         supabase_error = None
         try:
@@ -315,6 +327,7 @@ def fast_generate_stl():
 
         response_payload = {
             'stl_file': stl_b64,
+            'filename': download_name,
             'supabase_upload_enabled': is_supabase_upload_enabled(),
             'uploaded_files': supabase_uploads
         }

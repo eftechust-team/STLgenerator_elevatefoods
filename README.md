@@ -1,16 +1,15 @@
 # AI Image to STL Generator
 
-Generate multi-layer STL files from AI-generated black-and-white images with lasso/wand selection and adjustable edge dilation.
+Generate fast single-layer STL files from AI-generated or uploaded black-and-white images.
 
 ## Features
 
 - AI image generation via Doubao API.
 - Per-browser image quota capped at 4 generated images.
-- Canvas editing (pen, bucket, undo/redo).
-- Selection tools: Magic Wand and Lasso with add/subtract.
-- Expand Selection (px) to close gaps without cumulative growth.
-- Per-layer height and stacking options; STL export as a ZIP.
-- Automatic upload of generated STL/ZIP files to Supabase Storage (when configured).
+- Uploaded-image adjustment with brightness, contrast, and crop controls.
+- Fast hollow-shell STL generation after selecting yellow or green.
+- Automatic upload of generated STL files to Supabase Storage (when configured).
+- Unique filenames containing the source name, selected color, and UTC upload timestamp.
 
 ## Local Run
 
@@ -66,4 +65,6 @@ Steps:
 
 - The Doubao API key must be provided via `DOUBAO_API_KEY`. If missing, image generation returns a clear error.
 - Automatic Supabase upload is enabled only when all Supabase environment variables are set.
+- Generated files use the format `<source>_<color>_<UTC timestamp>.stl`, for example
+  `cat_yellow_20261020_024500_123456.stl`.
 - Logo at `/static/logo.jpeg` is optional and can be added later.
