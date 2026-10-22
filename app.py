@@ -10,7 +10,8 @@ import zipfile
 import threading
 import uuid
 import numpy as np
-from datetime import datetime, timezone
+from datetime import datetime
+from zoneinfo import ZoneInfo
 from scipy import interpolate, ndimage
 from skimage import measure, transform, filters
 import mapbox_earcut as earcut
@@ -102,7 +103,7 @@ def build_stl_filename(group_number, last_name, source_name, color):
     safe_color = str(color or '').strip().lower()
     if safe_color not in {'yellow', 'green'}:
         raise ValueError('Color must be yellow or green.')
-    timestamp = datetime.now(timezone.utc).strftime('%y%m%d%H%M%S')
+    timestamp = datetime.now(ZoneInfo('Asia/Hong_Kong')).strftime('%y%m%d%H%M%S')
     return f'{safe_group_number}_{safe_last_name}_{safe_source}_{safe_color}_{timestamp}.stl'
 
 

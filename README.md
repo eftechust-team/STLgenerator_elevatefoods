@@ -10,7 +10,7 @@ Generate fast single-layer STL files from AI-generated or uploaded black-and-whi
 - Fast hollow-shell STL generation after selecting yellow or green.
 - Automatic upload of generated STL files to Supabase Storage (when configured).
 - User-provided group number and last name at the start of the workflow.
-- Unique filenames containing the group number, last name, source name, selected color, and UTC upload timestamp.
+- Unique filenames containing the group number, last name, source name, selected color, and Hong Kong upload timestamp.
 
 ## Local Run
 
@@ -67,6 +67,6 @@ Steps:
 - The Doubao API key must be provided via `DOUBAO_API_KEY`. If missing, image generation returns a clear error.
 - Automatic Supabase upload is enabled only when all Supabase environment variables are set.
 - Generated files use the format
-  `<groupnumber>_<lastname>_<text/imagefilename>_<color>_<UTC upload time yymmddhhmmss>.stl`,
+  `<groupnumber>_<lastname>_<text/imagefilename>_<color>_<Hong Kong time yymmddhhmmss>.stl`,
   for example `12_Smith_cat_yellow_261020024500.stl`.
 - Logo at `/static/logo.jpeg` is optional and can be added later.
