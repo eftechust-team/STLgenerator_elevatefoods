@@ -95,13 +95,15 @@ def sanitize_storage_filename(filename):
     return safe_name or f'file_{uuid.uuid4().hex[:8]}'
 
 
-def build_stl_filename(source_name, color):
+def build_stl_filename(group_number, last_name, source_name, color):
+    safe_group_number = sanitize_storage_filename(group_number)
+    safe_last_name = sanitize_storage_filename(last_name)
     safe_source = sanitize_storage_filename(source_name)
     safe_color = str(color or '').strip().lower()
     if safe_color not in {'yellow', 'green'}:
         raise ValueError('Color must be yellow or green.')
-    timestamp = datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S_%f')
-    return f'{safe_source}_{safe_color}_{timestamp}.stl'
+    timestamp = datetime.now(timezone.utc).strftime('%y%m%d%H%M%S')
+    return f'{safe_group_number}_{safe_last_name}_{safe_source}_{safe_color}_{timestamp}.stl'
 
 
 def supabase_public_url(object_path):
@@ -285,7 +287,16 @@ def fast_generate_stl():
         color = str(data.get('color') or '').strip().lower()
         if color not in {'yellow', 'green'}:
             return jsonify({'error': 'Color must be yellow or green.'}), 400
-        download_name = build_stl_filename(data.get('source_name') or 'model', color)
+        group_number = str(data.get('group_number') or '').strip()
+        last_name = str(data.get('last_name') or '').strip()
+        if not group_number or not last_name:
+            return jsonify({'error': 'Group number and last name are required.'}), 400
+        download_name = build_stl_filename(
+            group_number,
+            last_name,
+            data.get('source_name') or 'model',
+            color
+        )
 
         # Decode base64 image
         image_data = base64.b64decode(image_b64)
