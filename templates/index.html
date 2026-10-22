@@ -28,23 +28,26 @@
             z-index: 1000;
             background: white;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-            padding: 12px 20px;
+            padding: 14px 24px;
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 28px;
         }
 
         .fixed-logo {
-            max-width: 200px;
+            width: 260px;
+            max-width: 30vw;
             height: auto;
             flex-shrink: 0;
         }
 
         .top-header h1 {
             margin: 0;
-            font-size: 24px;
+            font-size: 30px;
             color: #667eea;
             flex: 1;
+            line-height: 1.15;
+            white-space: nowrap;
         }
 
         .title-bar {
@@ -687,16 +690,17 @@
             }
 
             .top-header {
-                padding: 10px 12px;
-                gap: 12px;
+                padding: 10px 16px;
+                gap: 18px;
             }
 
             .fixed-logo {
-                max-width: 140px;
+                width: 190px;
+                max-width: 28vw;
             }
 
             .top-header h1 {
-                font-size: 18px;
+                font-size: 24px;
             }
 
             .container {
@@ -867,11 +871,14 @@
             }
 
             .fixed-logo {
-                max-width: 112px;
+                width: 132px;
+                max-width: 38vw;
             }
 
             .top-header h1 {
-                display: none;
+                display: block;
+                font-size: 18px;
+                white-space: normal;
             }
 
             .container {
@@ -921,11 +928,10 @@
 <body>
     <div class="top-header">
         <img src="/static/logo.jpeg" alt="Company Logo" class="fixed-logo">
+        <h1>🎨 AI Image to STL Generator</h1>
     </div>
     
     <div class="container">
-        <h1 style="text-align: center; color: #667eea; margin-top: 0; margin-bottom: 30px; font-size: 32px; padding: 30px 0;">AI Image to STL Generator</h1>
-        
         <div class="header">
             <img src="/static/logo.jpeg" alt="Company Logo" class="logo">
             <h1>🎨 AI Image to STL Generator</h1>
